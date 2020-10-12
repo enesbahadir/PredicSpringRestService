@@ -1,7 +1,7 @@
 package com.preschool.controller;
 
 import com.preschool.model.Discount;
-import com.preschool.repository.IDiscountRepository;
+import com.preschool.repository.DiscountRepository;
 import com.preschool.exeption.PreschoolNotFoundExection;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -16,9 +16,9 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 public class DiscountController {
 
-    private final IDiscountRepository discountRepository;
+    private final DiscountRepository discountRepository;
 
-    public DiscountController(IDiscountRepository discountRepository) {
+    public DiscountController(DiscountRepository discountRepository) {
         this.discountRepository = discountRepository;
     }
 
@@ -64,7 +64,7 @@ public class DiscountController {
                     discount.setDiscountName(newDiscount.getDiscountName());
                     discount.setDiscountType(newDiscount.getDiscountType());
                     discount.setOrganizationName(newDiscount.getOrganizationName());
-                    discount.setPreschoolNamesAndTheirDiscounts(newDiscount.getPreschoolNamesAndTheirDiscounts());
+                    //discount.setPreschoolNamesAndTheirDiscounts(newDiscount.getPreschoolNamesAndTheirDiscounts());
                     discount.setTypeOfUser(newDiscount.getTypeOfUser());
                     return discountRepository.save(discount);
                 })

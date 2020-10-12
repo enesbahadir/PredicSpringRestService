@@ -5,33 +5,38 @@ import com.preschool.enums.OrganizationNames;
 import com.preschool.enums.UserType;
 
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Discount {
 
     private String discountName;
+
+    @Enumerated(EnumType.STRING)
     private DiscountType discountType;
+
+    @Enumerated(EnumType.STRING)
     private List<UserType> userType;
+
     private OrganizationNames organizationName;
-    private Map<String, Long > preschoolNamesAndTheirDiscounts;
+
+    @OneToMany
+    private Set<DiscountsOfPreschool> discountsOfPreschool;
+
     private @Id @GeneratedValue int id;
 
-
-    public Discount() {
-    }
+    public Discount() { }
 
     public Discount(String discountName, DiscountType discountType, List<UserType> userType,
-                    OrganizationNames organizationName, Map<String, Long> preschoolNamesAndTheirDiscounts) {
+                    OrganizationNames organizationName, Set<DiscountsOfPreschool> discountsOfPreschool, int id) {
         this.discountName = discountName;
         this.discountType = discountType;
         this.userType = userType;
         this.organizationName = organizationName;
-        this.preschoolNamesAndTheirDiscounts = preschoolNamesAndTheirDiscounts;
+        this.discountsOfPreschool = discountsOfPreschool;
+        this.id = id;
     }
 
     public String getDiscountName() {
@@ -64,14 +69,6 @@ public class Discount {
 
     public void setOrganizationName(OrganizationNames organizationName) {
         this.organizationName = organizationName;
-    }
-
-    public Map<String, Long> getPreschoolNamesAndTheirDiscounts() {
-        return preschoolNamesAndTheirDiscounts;
-    }
-
-    public void setPreschoolNamesAndTheirDiscounts(Map<String, Long> preschoolNamesAndTheirDiscounts) {
-        this.preschoolNamesAndTheirDiscounts = preschoolNamesAndTheirDiscounts;
     }
 
     public int getId() {

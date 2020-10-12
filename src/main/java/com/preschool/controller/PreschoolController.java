@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 import com.preschool.model.Preschool;
 import com.preschool.exeption.PreschoolNotFoundExection;
-import com.preschool.repository.IPreschoolRepository;
+import com.preschool.repository.PreschoolRepository;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,22 +22,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class PreschoolController {
 
-    private final IPreschoolRepository preschoolRepository;
+    private final PreschoolRepository preschoolRepository;
 
-    public PreschoolController(IPreschoolRepository preschoolRepository) {
+    public PreschoolController(PreschoolRepository preschoolRepository) {
         this.preschoolRepository = preschoolRepository;
     }
 
     @GetMapping("/preschools")
-    CollectionModel<EntityModel<Preschool>> all()
+    CollectionModel<EntityModel<Preschool>> listOfPreschools()
     {
         List<EntityModel<Preschool>> preschools = preschoolRepository.findAll().stream()
                 .map(preschool -> EntityModel.of(preschool,
-                        linkTo(methodOn(PreschoolController.class).one(preschool.getId())).withSelfRel(),
-                        linkTo(methodOn(PreschoolController.class).all()).withRel("preschools")))
+                        linkTo(methodOn(PreschoolController.class).addPreschool(preschool.getId())).withSelfRel(),
+                        linkTo(methodOn(PreschoolController.class).listOfPreschools()).withRel("preschools")))
                 .collect(Collectors.toList());
 
-        return CollectionModel.of(preschools, linkTo(methodOn(PreschoolController.class).all()).withSelfRel());
+        return CollectionModel.of(preschools, linkTo(methodOn(PreschoolController.class).listOfPreschools()).withSelfRel());
     }
 
     @PostMapping("/preschools")
@@ -47,14 +47,14 @@ public class PreschoolController {
     }
 
     @GetMapping("/preschools/{id}")
-    EntityModel<Preschool> one(@PathVariable Integer id)
+    EntityModel<Preschool> addPreschool(@PathVariable Integer id)
     {
         Preschool preschool = preschoolRepository.findById(id)
                 .orElseThrow(() -> new PreschoolNotFoundExection(id));
 
         return EntityModel.of(preschool,
-                linkTo(methodOn(PreschoolController.class).one(id)).withSelfRel(),
-                linkTo(methodOn(PreschoolController.class).all()).withRel("preschools"));
+                linkTo(methodOn(PreschoolController.class).addPreschool(id)).withSelfRel(),
+                linkTo(methodOn(PreschoolController.class).listOfPreschools()).withRel("preschools"));
     }
 
     @PutMapping("/preschools/{id}")

@@ -10,10 +10,8 @@ public class Preschool {
     private long price;
     private String 	endOfEarlyRegistrationDate;
     private @Id @GeneratedValue int id;
-    private boolean isInEarlyRegistration;
 
-    public Preschool() {
-    }
+    public Preschool() { }
 
     public Preschool(String preschoolName,
                      String endOfEarlyRegistrationDate, long price, int id) {
@@ -21,7 +19,6 @@ public class Preschool {
         this.price = price;
         this.endOfEarlyRegistrationDate = endOfEarlyRegistrationDate;
         this.id = id;
-        //isInEarlyRegistration = EarlyRegistrationDateCalculator.isInEarlyRegistrationDate(endOfEarlyRegistrationDate);
     }
 
     public int getId() {
@@ -55,5 +52,4 @@ public class Preschool {
     public void setEndOfEarlyRegistrationDate(String endOfEarlyRegistrationDate) {
         this.endOfEarlyRegistrationDate = endOfEarlyRegistrationDate;
     }
-
 }
