@@ -1,11 +1,13 @@
 package com.preschool.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
 public class Preschool {
+    @Column(unique = true)
     private String preschoolName;
     private long price;
     private String 	endOfEarlyRegistrationDate;
@@ -14,11 +16,11 @@ public class Preschool {
     public Preschool() { }
 
     public Preschool(String preschoolName,
-                     String endOfEarlyRegistrationDate, long price, int id) {
+                     String endOfEarlyRegistrationDate, long price) {
         this.preschoolName = preschoolName;
         this.price = price;
         this.endOfEarlyRegistrationDate = endOfEarlyRegistrationDate;
-        this.id = id;
+
     }
 
     public int getId() {

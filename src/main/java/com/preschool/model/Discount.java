@@ -5,7 +5,6 @@ import com.preschool.enums.OrganizationNames;
 import com.preschool.enums.UserType;
 
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.*;
 
@@ -13,30 +12,38 @@ import javax.persistence.*;
 public class Discount {
 
     private String discountName;
-
-    @Enumerated(EnumType.STRING)
     private DiscountType discountType;
 
+    @ElementCollection(targetClass=UserType.class)
     @Enumerated(EnumType.STRING)
+    @CollectionTable(name="discount_userType")
+    @Column(name="userType")
     private List<UserType> userType;
 
     private OrganizationNames organizationName;
 
-    @OneToMany
-    private Set<DiscountsOfPreschool> discountsOfPreschool;
+    @ManyToMany(targetEntity = DiscountsOfPreschool.class,cascade = CascadeType.ALL)
+    private List<DiscountsOfPreschool> discountsOfPreschool;
+
+    public List<DiscountsOfPreschool> getDiscountsOfPreschool() {
+        return discountsOfPreschool;
+    }
+
+    public void setDiscountsOfPreschool(List<DiscountsOfPreschool> discountsOfPreschool) {
+        this.discountsOfPreschool = discountsOfPreschool;
+    }
 
     private @Id @GeneratedValue int id;
 
     public Discount() { }
 
     public Discount(String discountName, DiscountType discountType, List<UserType> userType,
-                    OrganizationNames organizationName, Set<DiscountsOfPreschool> discountsOfPreschool, int id) {
+                    OrganizationNames organizationName) {
         this.discountName = discountName;
         this.discountType = discountType;
         this.userType = userType;
         this.organizationName = organizationName;
-        this.discountsOfPreschool = discountsOfPreschool;
-        this.id = id;
+
     }
 
     public String getDiscountName() {
@@ -55,14 +62,6 @@ public class Discount {
         this.discountType = discountType;
     }
 
-    public List<UserType> getTypeOfUser() {
-        return userType;
-    }
-
-    public void setTypeOfUser(List<UserType> userType) {
-        this.userType = userType;
-    }
-
     public OrganizationNames getOrganizationName() {
         return organizationName;
     }
@@ -78,4 +77,13 @@ public class Discount {
     public void setId(int id) {
         this.id = id;
     }
+
+    public List<UserType> getUserType() {
+        return userType;
+    }
+
+    public void setUserType(List<UserType> userType) {
+        this.userType = userType;
+    }
+
 }

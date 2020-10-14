@@ -7,15 +7,17 @@ public class DiscountsOfPreschool {
 
     private @Id @GeneratedValue int id;
 
-    @ManyToOne
-    @JoinColumn(name = "discount_id")
-    private Discount discount;
-
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "preschool_id")
     private Preschool preschool;
-
     private Long value;
+
+    public DiscountsOfPreschool(Preschool preschool, Long value) {
+        this.preschool = preschool;
+        this.value = value;
+    }
+
+    public DiscountsOfPreschool() { }
 
     public int getId() {
         return id;
@@ -23,14 +25,6 @@ public class DiscountsOfPreschool {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public Discount getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(Discount discount) {
-        this.discount = discount;
     }
 
     public Preschool getPreschool() {
