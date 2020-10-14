@@ -16,6 +16,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
 public class PreschoolService {
+
     private final PreschoolRepository preschoolRepository;
 
     public PreschoolService(PreschoolRepository preschoolRepository) {
@@ -35,12 +36,12 @@ public class PreschoolService {
      * Anaokulu listesi oluşturma metodu, ilgili listeyi repository'den oluşturur
      * @return Anaokulu listesini HATEOAS uygun olarak döner
      */
-    public List<EntityModel<Preschool>> listOfPreschools ()
+    public List<EntityModel<Preschool>> getPreschools ()
     {
         return preschoolRepository.findAll().stream()
                 .map(preschool -> EntityModel.of(preschool,
                         linkTo(methodOn(PreschoolController.class).getPreschoolById(preschool.getId())).withSelfRel(),
-                        linkTo(methodOn(PreschoolController.class).listOfPreschools()).withRel("preschools")))
+                        linkTo(methodOn(PreschoolController.class).getPreschools()).withRel("preschools")))
                 .collect(Collectors.toList());
     }
 

@@ -31,11 +31,11 @@ public class PreschoolController {
      * @return HATEOAS uygun olarak anaokulu listesini döner
      */
     @GetMapping("/preschools")
-    public CollectionModel<EntityModel<Preschool>> listOfPreschools()
+    public CollectionModel<EntityModel<Preschool>> getPreschools()
     {
-        List<EntityModel<Preschool>> preschools = preschoolService.listOfPreschools();
+        List<EntityModel<Preschool>> preschools = preschoolService.getPreschools();
         return CollectionModel.of(preschools, linkTo(methodOn(PreschoolController.class)
-                .listOfPreschools()).withSelfRel());
+                .getPreschools()).withSelfRel());
     }
 
     /**
@@ -49,7 +49,7 @@ public class PreschoolController {
         preschoolService.createPreschool(newPreschool);
         return EntityModel.of(newPreschool,
                 linkTo(methodOn(PreschoolController.class).getPreschoolById(newPreschool.getId())).withSelfRel(),
-                linkTo(methodOn(PreschoolController.class).listOfPreschools()).withRel("preschools"));
+                linkTo(methodOn(PreschoolController.class).getPreschools()).withRel("preschools"));
     }
 
     /**
@@ -64,7 +64,7 @@ public class PreschoolController {
 
         return EntityModel.of(preschool,
                 linkTo(methodOn(PreschoolController.class).getPreschoolById(id)).withSelfRel(),
-                linkTo(methodOn(PreschoolController.class).listOfPreschools()).withRel("preschools"));
+                linkTo(methodOn(PreschoolController.class).getPreschools()).withRel("preschools"));
     }
 
     /**
@@ -79,7 +79,7 @@ public class PreschoolController {
         Preschool preschool = preschoolService.updatePreschool(newPreschool, id);
         return EntityModel.of(preschool,
                 linkTo(methodOn(PreschoolController.class).getPreschoolById(id)).withSelfRel(),
-                linkTo(methodOn(PreschoolController.class).listOfPreschools()).withRel("preschools"));
+                linkTo(methodOn(PreschoolController.class).getPreschools()).withRel("preschools"));
     }
 
     /**
