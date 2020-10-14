@@ -3,11 +3,9 @@ package com.preschool.controller;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.preschool.model.Preschool;
-import com.preschool.exeption.PreschoolNotFoundExection;
-import com.preschool.repository.PreschoolRepository;
+import com.preschool.service.PreschoolService;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,60 +20,75 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class PreschoolController {
 
-    private final PreschoolRepository preschoolRepository;
+    private final PreschoolService preschoolService;
 
-    public PreschoolController(PreschoolRepository preschoolRepository) {
-        this.preschoolRepository = preschoolRepository;
+    public PreschoolController(PreschoolService preschoolService) {
+        this.preschoolService = preschoolService;
     }
 
+    /**
+     * Anaokulu listesine erişmek için çağrılan GET metodu
+     * @return HATEOAS uygun olarak anaokulu listesini döner
+     */
     @GetMapping("/preschools")
-    CollectionModel<EntityModel<Preschool>> listOfPreschools()
+    public CollectionModel<EntityModel<Preschool>> listOfPreschools()
     {
-        List<EntityModel<Preschool>> preschools = preschoolRepository.findAll().stream()
-                .map(preschool -> EntityModel.of(preschool,
-                        linkTo(methodOn(PreschoolController.class).addPreschool(preschool.getId())).withSelfRel(),
-                        linkTo(methodOn(PreschoolController.class).listOfPreschools()).withRel("preschools")))
-                .collect(Collectors.toList());
-
-        return CollectionModel.of(preschools, linkTo(methodOn(PreschoolController.class).listOfPreschools()).withSelfRel());
+        List<EntityModel<Preschool>> preschools = preschoolService.listOfPreschools();
+        return CollectionModel.of(preschools, linkTo(methodOn(PreschoolController.class)
+                .listOfPreschools()).withSelfRel());
     }
 
+    /**
+     * Anaokulu oluşturmak için çağrılan POST metodu
+     * @param newPreschool yeni oluşturulan olan anaokulu nesnesi
+     * @return HATEOAS uygun olarak eklenen anaokulunu döne r
+     */
     @PostMapping("/preschools")
-    Preschool newPreschool(@RequestBody Preschool newPreschool)
+    public EntityModel<Preschool> createPreschool (@RequestBody Preschool newPreschool)
     {
-        return preschoolRepository.save(newPreschool);
-    }
-
-    @GetMapping("/preschools/{id}")
-    EntityModel<Preschool> addPreschool(@PathVariable Integer id)
-    {
-        Preschool preschool = preschoolRepository.findById(id)
-                .orElseThrow(() -> new PreschoolNotFoundExection(id));
-
-        return EntityModel.of(preschool,
-                linkTo(methodOn(PreschoolController.class).addPreschool(id)).withSelfRel(),
+        preschoolService.createPreschool(newPreschool);
+        return EntityModel.of(newPreschool,
+                linkTo(methodOn(PreschoolController.class).getPreschoolById(newPreschool.getId())).withSelfRel(),
                 linkTo(methodOn(PreschoolController.class).listOfPreschools()).withRel("preschools"));
     }
 
-    @PutMapping("/preschools/{id}")
-    Preschool replacePreschool(@RequestBody Preschool newPreschool, @PathVariable Integer id)
+    /**
+     * İstenen anaokulunu id üzerinden arayarak ilgili anaokulunun dönen metod
+     * @param id ilgili anaokulununu id'si
+     * @return HATEOAS uygun olarak ilgili anaokulunu döner
+     */
+    @GetMapping("/preschools/{id}")
+    public EntityModel<Preschool> getPreschoolById (@PathVariable Integer id)
     {
-        return preschoolRepository.findById(id)
-                .map(preschool -> {
-                    preschool.setPreschoolName(newPreschool.getPreschoolName());
-                    preschool.setPrice(newPreschool.getPrice());
-                    preschool.setEndOfEarlyRegistrationDate(newPreschool.getEndOfEarlyRegistrationDate());
-                    return preschoolRepository.save(preschool);
-                })
-                .orElseGet(() -> {
-                    newPreschool.setId(id);
-                    return preschoolRepository.save(newPreschool);
-                });
+        Preschool preschool = preschoolService.getPreschoolById(id);
+
+        return EntityModel.of(preschool,
+                linkTo(methodOn(PreschoolController.class).getPreschoolById(id)).withSelfRel(),
+                linkTo(methodOn(PreschoolController.class).listOfPreschools()).withRel("preschools"));
     }
 
+    /**
+     * Anaokulu düzenlemek için çağırılan PUT metodu
+     * @param newPreschool değişiklik yapılmış olan anaokulu nesnesi
+     * @param id değiştirilecek olan anaokulunun id'si
+     * @return HATEOAS uygun olarak düzenlenen yeni anaokulunu döner
+     */
+    @PutMapping("/preschools/{id}")
+    public EntityModel<Preschool> updatePreschool (@RequestBody Preschool newPreschool, @PathVariable Integer id)
+    {
+        Preschool preschool = preschoolService.updatePreschool(newPreschool, id);
+        return EntityModel.of(preschool,
+                linkTo(methodOn(PreschoolController.class).getPreschoolById(id)).withSelfRel(),
+                linkTo(methodOn(PreschoolController.class).listOfPreschools()).withRel("preschools"));
+    }
+
+    /**
+     * Anaokulu silmek için çağırılan DELETE metodu
+     * @param id silinecek olan anaokulun id'si
+     */
     @DeleteMapping("/preschools/{id}")
     void deletePreschool(@PathVariable Integer id) {
-        preschoolRepository.deleteById(id);
+        preschoolService.deletePreschool(id);
     }
 
 }
