@@ -3,7 +3,7 @@ package com.preschool.model;
 import javax.persistence.*;
 
 @Entity
-public class DiscountsOfPreschool {
+public class DiscountValues {
 
     private @Id @GeneratedValue int id;
 
@@ -12,12 +12,12 @@ public class DiscountsOfPreschool {
     private Preschool preschool;
     private Long value;
 
-    public DiscountsOfPreschool(Preschool preschool, Long value) {
+    public DiscountValues(Preschool preschool, Long value) {
         this.preschool = preschool;
         this.value = value;
     }
 
-    public DiscountsOfPreschool() { }
+    public DiscountValues() { }
 
     public int getId() {
         return id;

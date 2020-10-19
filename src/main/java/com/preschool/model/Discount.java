@@ -12,7 +12,8 @@ import javax.persistence.*;
 public class Discount {
 
     private String discountName;
-    private DiscountType discountType;
+    private String discountType;
+
 
     @ElementCollection(targetClass=UserType.class)
     @Enumerated(EnumType.STRING)
@@ -20,31 +21,30 @@ public class Discount {
     @Column(name="userType")
     private List<UserType> userType;
 
-    private OrganizationNames organizationName;
+    private String organizationName;
 
-    @ManyToMany(targetEntity = DiscountsOfPreschool.class,cascade = CascadeType.ALL)
-    private List<DiscountsOfPreschool> discountsOfPreschool;
+    @ManyToMany(targetEntity = DiscountValues.class,cascade = CascadeType.ALL)
+    private List<DiscountValues> discountValues;
 
-    public List<DiscountsOfPreschool> getDiscountsOfPreschool() {
-        return discountsOfPreschool;
+    public Discount(String discountName, String discountType, List<UserType> userType,
+                    String organizationName) {
+        this.discountName = discountName;
+        this.discountType = discountType;
+        this.userType = userType;
+        this.organizationName = organizationName;
     }
 
-    public void setDiscountsOfPreschool(List<DiscountsOfPreschool> discountsOfPreschool) {
-        this.discountsOfPreschool = discountsOfPreschool;
+    public List<DiscountValues> getDiscountsOfPreschool() {
+        return discountValues;
+    }
+
+    public void setDiscountsOfPreschool(List<DiscountValues> discountValues) {
+        this.discountValues = discountValues;
     }
 
     private @Id @GeneratedValue int id;
 
     public Discount() { }
-
-    public Discount(String discountName, DiscountType discountType, List<UserType> userType,
-                    OrganizationNames organizationName) {
-        this.discountName = discountName;
-        this.discountType = discountType;
-        this.userType = userType;
-        this.organizationName = organizationName;
-
-    }
 
     public String getDiscountName() {
         return discountName;
@@ -54,20 +54,36 @@ public class Discount {
         this.discountName = discountName;
     }
 
-    public DiscountType getDiscountType() {
+    public String getDiscountType() {
         return discountType;
     }
 
-    public void setDiscountType(DiscountType discountType) {
+    public void setDiscountType(String discountType) {
         this.discountType = discountType;
     }
 
-    public OrganizationNames getOrganizationName() {
+    public List<UserType> getUserType() {
+        return userType;
+    }
+
+    public void setUserType(List<UserType> userType) {
+        this.userType = userType;
+    }
+
+    public String getOrganizationName() {
         return organizationName;
     }
 
-    public void setOrganizationName(OrganizationNames organizationName) {
+    public void setOrganizationName(String organizationName) {
         this.organizationName = organizationName;
+    }
+
+    public List<DiscountValues> getDiscountValues() {
+        return discountValues;
+    }
+
+    public void setDiscountValues(List<DiscountValues> discountValues) {
+        this.discountValues = discountValues;
     }
 
     public int getId() {
@@ -78,12 +94,5 @@ public class Discount {
         this.id = id;
     }
 
-    public List<UserType> getUserType() {
-        return userType;
-    }
-
-    public void setUserType(List<UserType> userType) {
-        this.userType = userType;
-    }
 
 }

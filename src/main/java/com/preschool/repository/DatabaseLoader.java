@@ -4,7 +4,7 @@ import com.preschool.enums.DiscountType;
 import com.preschool.enums.OrganizationNames;
 import com.preschool.enums.UserType;
 import com.preschool.model.Discount;
-import com.preschool.model.DiscountsOfPreschool;
+import com.preschool.model.DiscountValues;
 import com.preschool.model.Preschool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,41 +27,48 @@ public class DatabaseLoader implements InitializingBean {
 
     private final PreschoolRepository preschoolRepository;
 
-    public DatabaseLoader(DiscountRepository discountRepository, PreschoolRepository preschoolRepository) {
+    private final DiscountValuesRepository discountValuesRepository;
+
+    public DatabaseLoader(DiscountRepository discountRepository, PreschoolRepository preschoolRepository, DiscountValuesRepository discountValuesRepository) {
         this.discountRepository = discountRepository;
         this.preschoolRepository = preschoolRepository;
+        this.discountValuesRepository = discountValuesRepository;
     }
 
     @Override
     public void afterPropertiesSet() throws Exception {
 
         Preschool preschoolM = new Preschool("M Lalebahçesi",
-                "01/10/2020", 1000);
+                "10/01/2020", 1000);
 
         Preschool preschoolY = new Preschool("Y Lalebahçesi",
-                "01/11/2020", 1500);
+                "11/01/2020", 1500);
         log.info("Preloading Preschool "+ preschoolRepository.save(preschoolM));
         log.info("Preloading Preschool "+ preschoolRepository.save(preschoolY));
 
-        DiscountsOfPreschool discountsOfPreschoolM = new DiscountsOfPreschool(preschoolM,20L);
-        DiscountsOfPreschool discountsOfPreschoolY = new DiscountsOfPreschool(preschoolY,15L);
+        DiscountValues discountValuesM = new DiscountValues(preschoolM,20L);
+        DiscountValues discountValuesY = new DiscountValues(preschoolY,15L);
 
-        Discount discount =  new Discount("Erken Kayıt Indirimi", DiscountType.PERCENTAGE,
-                new ArrayList<>(Arrays.asList(UserType.IHVAN, UserType.PERSONEL, UserType.STANDART)),
-                OrganizationNames.NONE );
+
+        Discount discount =  new Discount("Erken Kayıt Indirimi", "PERCENTAGE",
+                new ArrayList<UserType>(Arrays.asList(UserType.IHVAN, UserType.PERSONEL,
+                        UserType.STANDART)),
+                "NONE" );
 
         discount.setDiscountsOfPreschool(new ArrayList<>() {{
-            add(discountsOfPreschoolM);
-            add(discountsOfPreschoolY);
+            add(discountValuesM);
+            add(discountValuesY);
         }});
         log.info("Preloading Discount" + discountRepository.save(discount));
+        log.info("Preloading Discount Values" + discountValuesRepository.save(discountValuesM));
+        log.info("Preloading Discount Values" + discountValuesRepository.save(discountValuesY));
 
-        Discount discountIhvan =  new Discount("Ihvan Indirimi", DiscountType.PERCENTAGE,
-                new ArrayList<>(Arrays.asList(UserType.IHVAN)),
-                OrganizationNames.NONE );
+        Discount discountIhvan =  new Discount("Ihvan Indirimi","PERCENTAGE",
+                new ArrayList<UserType>(List.of(UserType.IHVAN)),
+                "NONE" );
 
-        DiscountsOfPreschool discountsIhvanOfPreschoolM = new DiscountsOfPreschool(preschoolM,5L);
-        DiscountsOfPreschool discountsIhvanOfPreschoolY = new DiscountsOfPreschool(preschoolY,10L);
+        DiscountValues discountsIhvanOfPreschoolM = new DiscountValues(preschoolM,5L);
+        DiscountValues discountsIhvanOfPreschoolY = new DiscountValues(preschoolY,10L);
 
         discountIhvan.setDiscountsOfPreschool(new ArrayList<>() {{
             add(discountsIhvanOfPreschoolM);
@@ -69,5 +76,9 @@ public class DatabaseLoader implements InitializingBean {
         }});
 
         log.info("Preloading Discount" + discountRepository.save(discountIhvan));
+        log.info("Preloading Discount Values" + discountValuesRepository.save(discountsIhvanOfPreschoolM));
+        log.info("Preloading Discount Values" + discountValuesRepository.save(discountsIhvanOfPreschoolY));
+
+
     }
 }
