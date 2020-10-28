@@ -1,6 +1,7 @@
 package com.preschool.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class DiscountValues {
@@ -10,6 +11,10 @@ public class DiscountValues {
     @OneToOne
     @JoinColumn(name = "preschool_id")
     private Preschool preschool;
+
+    @ManyToMany(mappedBy = "discountValues")
+    private List<Discount> discounts;
+
     private Long value;
 
     public DiscountValues(Preschool preschool, Long value) {

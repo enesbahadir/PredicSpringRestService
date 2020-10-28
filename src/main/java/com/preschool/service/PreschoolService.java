@@ -27,9 +27,12 @@ public class PreschoolService {
      * Anaokulu oluşturma metodu, ilgili anaokulunu repository'e ekler
      * @param model Oluşturulacak olan anaokulu
      */
-    public void createPreschool (Preschool model)
+    public Preschool createPreschool (Preschool model)
     {
-        preschoolRepository.save(model);
+        Preschool newPreschool = new Preschool(model.getPreschoolName(),model.getEndOfEarlyRegistrationDate(),
+                model.getPrice());
+        preschoolRepository.save(newPreschool);
+        return newPreschool;
     }
 
     /**

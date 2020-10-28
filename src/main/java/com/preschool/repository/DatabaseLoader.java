@@ -55,7 +55,7 @@ public class DatabaseLoader implements InitializingBean {
                         UserType.STANDART)),
                 "NONE" );
 
-        discount.setDiscountsOfPreschool(new ArrayList<>() {{
+        discount.setDiscountValues(new ArrayList<>() {{
             add(discountValuesM);
             add(discountValuesY);
         }});
@@ -70,7 +70,7 @@ public class DatabaseLoader implements InitializingBean {
         DiscountValues discountsIhvanOfPreschoolM = new DiscountValues(preschoolM,5L);
         DiscountValues discountsIhvanOfPreschoolY = new DiscountValues(preschoolY,10L);
 
-        discountIhvan.setDiscountsOfPreschool(new ArrayList<>() {{
+        discountIhvan.setDiscountValues(new ArrayList<>() {{
             add(discountsIhvanOfPreschoolM);
             add(discountsIhvanOfPreschoolY);
         }});

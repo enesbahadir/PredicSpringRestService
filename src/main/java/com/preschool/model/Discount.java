@@ -1,12 +1,10 @@
 package com.preschool.model;
 
-import com.preschool.enums.DiscountType;
-import com.preschool.enums.OrganizationNames;
 import com.preschool.enums.UserType;
-
-import java.util.List;
+import org.springframework.data.rest.core.annotation.RestResource;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Discount {
@@ -23,7 +21,13 @@ public class Discount {
 
     private String organizationName;
 
-    @ManyToMany(targetEntity = DiscountValues.class,cascade = CascadeType.ALL)
+    //@ManyToMany(targetEntity = DiscountValues.class,cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "discountValues_discount",
+            joinColumns = @JoinColumn(name = "discountValues_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "discount_id",
+                    referencedColumnName = "id"))
+    @RestResource(path = "values", rel="values")
     private List<DiscountValues> discountValues;
 
     public Discount(String discountName, String discountType, List<UserType> userType,
@@ -32,14 +36,6 @@ public class Discount {
         this.discountType = discountType;
         this.userType = userType;
         this.organizationName = organizationName;
-    }
-
-    public List<DiscountValues> getDiscountsOfPreschool() {
-        return discountValues;
-    }
-
-    public void setDiscountsOfPreschool(List<DiscountValues> discountValues) {
-        this.discountValues = discountValues;
     }
 
     private @Id @GeneratedValue int id;

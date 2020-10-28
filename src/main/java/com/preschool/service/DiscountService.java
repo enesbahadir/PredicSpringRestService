@@ -6,6 +6,7 @@ import com.preschool.model.Discount;
 import com.preschool.repository.DiscountRepository;
 import org.springframework.hateoas.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,6 +46,7 @@ public class DiscountService {
         return discountRepository.findById(id)
                 .orElseThrow(() -> new PreschoolNotFoundExection(id));
     }
+
 
     /**
      * İndirim oluşturma metodu, ilgili anaokulunu repository'e ekler

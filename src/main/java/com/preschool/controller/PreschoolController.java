@@ -46,7 +46,7 @@ public class PreschoolController {
     @PostMapping("/preschools")
     public EntityModel<Preschool> createPreschool (@RequestBody Preschool newPreschool)
     {
-        preschoolService.createPreschool(newPreschool);
+        newPreschool = preschoolService.createPreschool(newPreschool);
         return EntityModel.of(newPreschool,
                 linkTo(methodOn(PreschoolController.class).getPreschoolById(newPreschool.getId())).withSelfRel(),
                 linkTo(methodOn(PreschoolController.class).getPreschools()).withRel("preschools"));

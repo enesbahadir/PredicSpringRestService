@@ -3,16 +3,11 @@ package com.preschool.service;
 import com.preschool.controller.DiscountValuesController;
 import com.preschool.exeption.PreschoolNotFoundExection;
 import com.preschool.model.DiscountValues;
-import com.preschool.model.Preschool;
+import com.preschool.repository.DiscountRepository;
 import com.preschool.repository.DiscountValuesRepository;
-import com.preschool.repository.PreschoolRepository;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,14 +17,18 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Service
 public class DiscountValuesService {
     private final DiscountValuesRepository discountValuesRepository;
-    private final PreschoolRepository preschoolRepository;
+    private final DiscountRepository discountRepository;
 
-    public DiscountValuesService(DiscountValuesRepository discountValuesRepository, PreschoolRepository preschoolRepository) {
+    public DiscountValuesService(DiscountValuesRepository discountValuesRepository, DiscountRepository discountRepository) {
         this.discountValuesRepository = discountValuesRepository;
-        this.preschoolRepository = preschoolRepository;
+        this.discountRepository = discountRepository;
     }
 
-
+    /**
+     *
+     * @param discountValues
+     * @return
+     */
     public DiscountValues createDiscountValue(DiscountValues discountValues)
     {
         DiscountValues newDiscountValue = new DiscountValues(discountValues.getPreschool(),
@@ -60,5 +59,15 @@ public class DiscountValuesService {
     {
         return discountValuesRepository.findById(id)
                 .orElseThrow(() -> new PreschoolNotFoundExection(id));
+    }
+
+    public List<EntityModel<DiscountValues>> getDiscountValuesByDiscountId(int id)
+    {
+        return discountRepository.findById(id).get().getDiscountValues().stream()
+                .map(discountValues -> EntityModel.of(discountValues,
+                        linkTo(methodOn(DiscountValuesController.class).getDiscountValueById(discountValues.getId())).withSelfRel(),
+                        linkTo(methodOn(DiscountValuesController.class).getDiscountValues()).withRel("values")))
+                .collect(Collectors.toList());
+
     }
 }
