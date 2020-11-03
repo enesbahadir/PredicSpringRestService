@@ -4,6 +4,7 @@ import com.preschool.controller.PreschoolController;
 import com.preschool.exeption.PreschoolNotFoundExection;
 import com.preschool.model.Preschool;
 import com.preschool.repository.PreschoolRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +17,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
 public class PreschoolService {
-
+    @Autowired
     private final PreschoolRepository preschoolRepository;
 
     public PreschoolService(PreschoolRepository preschoolRepository) {

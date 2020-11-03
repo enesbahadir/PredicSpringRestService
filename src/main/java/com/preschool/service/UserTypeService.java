@@ -6,6 +6,7 @@ import com.preschool.exeption.PreschoolNotFoundExection;
 import com.preschool.model.Preschool;
 import com.preschool.model.UserType;
 import com.preschool.repository.UserTypeRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +19,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
 public class UserTypeService {
-
+    @Autowired
     private final UserTypeRepository userTypeRepository ;
 
     public UserTypeService(UserTypeRepository userTypeRepository) {

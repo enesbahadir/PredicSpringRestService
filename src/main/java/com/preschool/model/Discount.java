@@ -12,12 +12,13 @@ public class Discount {
     private String discountName;
     private String discountType;
 
-
-    @ElementCollection(targetClass=UserType.class)
+   /* @ElementCollection(targetClass=UserType.class)
     @Enumerated(EnumType.STRING)
     @CollectionTable(name="discount_userType")
     @Column(name="userType")
-    private List<UserType> userType;
+    */
+   @ElementCollection
+    private List<String> userType;
 
     private String organizationName;
 
@@ -30,7 +31,7 @@ public class Discount {
     @RestResource(path = "values", rel="values")
     private List<DiscountValues> discountValues;
 
-    public Discount(String discountName, String discountType, List<UserType> userType,
+    public Discount(String discountName, String discountType, List<String> userType,
                     String organizationName) {
         this.discountName = discountName;
         this.discountType = discountType;
@@ -58,11 +59,11 @@ public class Discount {
         this.discountType = discountType;
     }
 
-    public List<UserType> getUserType() {
+    public List<String> getUserType() {
         return userType;
     }
 
-    public void setUserType(List<UserType> userType) {
+    public void setUserType(List<String> userType) {
         this.userType = userType;
     }
 

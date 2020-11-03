@@ -34,6 +34,7 @@ class PredicApplicationTests {
 
 	@Test
 	public void whenSaveManyToManyRelationship_thenCorrect() {
+		/*
 		Discount discount1 = new Discount("Erken Kayıt Indirimi", "PERCENTAGE",
 				new ArrayList<UserType>(Arrays.asList(UserType.IHVAN, UserType.PERSONEL,
 						UserType.STANDART)),
@@ -47,7 +48,7 @@ class PredicApplicationTests {
 		DiscountValues discountValues1 = new DiscountValues(preschool1,20L);
 		template.postForEntity(DISCOUNTVALUES_ENDPOINT, discountValues1, DiscountValues.class);
 
-		/*
+
 		HttpHeaders requestHeaders = new HttpHeaders();
 		requestHeaders.add("Content-type", "text/uri-list");
 		HttpEntity<String> httpEntity = new HttpEntity<>(

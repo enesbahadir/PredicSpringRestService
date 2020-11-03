@@ -4,6 +4,7 @@ import com.preschool.controller.DiscountController;
 import com.preschool.exeption.PreschoolNotFoundExection;
 import com.preschool.model.Discount;
 import com.preschool.repository.DiscountRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +17,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
 public class DiscountService {
-
+    @Autowired
     private final DiscountRepository discountRepository;
 
     public DiscountService(DiscountRepository discountRepository) {
